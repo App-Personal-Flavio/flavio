@@ -6,7 +6,18 @@ const User = require('./models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+//Importar o Categoria
+const Category = require('./models/Category');
 
+//Importart o Indicate
+const Indicate = require('./models/Indicate');
+
+//Importar o Treino
+const Training = require('./models/Training');
+
+//Importar o peso
+
+const Weight = require('./models/Weight');
 
 async function isAuthorized(req, res, next) {
     try {
@@ -145,7 +156,7 @@ app.get("/usuarios", isAuthorized, async (req, res) => {
 );
 
 // Listar um usuário
-app.get("/usuarios/:id", isAuthorized, async (req, res) => {
+app.get("/usuario/:id", isAuthorized, async (req, res) => {
     const { id } = req.params;
     try {
         const user = await User.findByPk(id);
@@ -158,8 +169,6 @@ app.get("/usuarios/:id", isAuthorized, async (req, res) => {
     }
 });
 
-//Importart o Indicate
-const Indicate = require('./models/Indicate');
 
 //Criar um sistema de convite
 app.post("/convite", isAuthorized, async (req, res) => {
@@ -218,9 +227,6 @@ app.get("/convites/:id", isAuthorized, async (req, res) => {
         });
     }
 });
-
-//Importar o Treino
-const Training = require('./models/Training');
 //Criar uma rota de treino
 app.post("/treino", isAuthorizedPersonal, async (req, res) => {
     const {id, nome, descricao, categoria, usuario_id } = req.body;
@@ -237,7 +243,7 @@ app.post("/treino", isAuthorizedPersonal, async (req, res) => {
             nome: training.nome,
             descricao: training.descricao,
             categoria: training.categoria,
-            usuario_id: training.usuario_id
+            usuario_id: training.usuario_idp
         });
     } catch (error) {
         res.status(200).send({ error: true, message: "Erro criando treino" });
@@ -294,8 +300,6 @@ app.get("/treinos/categoria/:categoria", isAuthorized, async (req, res) => {
     }
 });
 
-//Importar o Categoria
-const Category = require('./models/Category');
 
 //Listar as categorias por id_usuario
 app.get("/categorias/:id_usuario", isAuthorized, async (req, res) => {
@@ -334,9 +338,6 @@ app.post("/categoria", isAuthorizedPersonal, async (req, res) => {
     }
 });
 
-//Importar o peso
-
-const Weight = require('./models/Weight');
 //Criar uma rota de cadastrar peso
 app.post("/peso", isAuthorized, async (req, res) => {
     const { id, peso, massa, usuario_id } = req.body;
